@@ -64,6 +64,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 	int level = 0;
+	int button = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -95,19 +96,19 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  for(level=0;level<11;level++){
-		  HAL_GPIO_WritePin(GPIOA, Led_0_Pin,(level>0)?1:0);
-		  HAL_GPIO_WritePin(GPIOA, Led_1_Pin,(level>1)?1:0);
-		  HAL_GPIO_WritePin(GPIOA, Led_2_Pin,(level>2)?1:0);
-		  HAL_GPIO_WritePin(GPIOA, Led_3_Pin,(level>3)?1:0);
-		  HAL_GPIO_WritePin(GPIOA, Led_4_Pin,(level>4)?1:0);
-		  HAL_GPIO_WritePin(GPIOA, Led_5_Pin,(level>5)?1:0);
-		  HAL_GPIO_WritePin(GPIOA, Led_6_Pin,(level>6)?1:0);
-		  HAL_GPIO_WritePin(GPIOA, Led_7_Pin,(level>7)?1:0);
-		  HAL_GPIO_WritePin(GPIOB, Led_8_Pin,(level>8)?1:0);
-		  HAL_GPIO_WritePin(GPIOB, Led_9_Pin,(level>9)?1:0);
-		  HAL_Delay(500);
-	  }
+	  button = HAL_GPIO_ReadPin(Button_GPIO_Port, Button_Pin);
+	  (button == 0) ? (level++) : (level=0);
+	  HAL_GPIO_WritePin(GPIOA, Led_0_Pin,(level>0)?1:0);
+	  HAL_GPIO_WritePin(GPIOA, Led_1_Pin,(level>1)?1:0);
+	  HAL_GPIO_WritePin(GPIOA, Led_2_Pin,(level>2)?1:0);
+	  HAL_GPIO_WritePin(GPIOA, Led_3_Pin,(level>3)?1:0);
+	  HAL_GPIO_WritePin(GPIOA, Led_4_Pin,(level>4)?1:0);
+	  HAL_GPIO_WritePin(GPIOA, Led_5_Pin,(level>5)?1:0);
+	  HAL_GPIO_WritePin(GPIOA, Led_6_Pin,(level>6)?1:0);
+	  HAL_GPIO_WritePin(GPIOA, Led_7_Pin,(level>7)?1:0);
+	  HAL_GPIO_WritePin(GPIOB, Led_8_Pin,(level>8)?1:0);
+	  HAL_GPIO_WritePin(GPIOB, Led_9_Pin,(level>9)?1:0);
+	  HAL_Delay(500);
   }
   /* USER CODE END 3 */
 }
@@ -184,6 +185,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Button_Pin */
+  GPIO_InitStruct.Pin = Button_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(Button_GPIO_Port, &GPIO_InitStruct);
 
 }
 
