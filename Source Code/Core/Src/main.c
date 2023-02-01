@@ -65,6 +65,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 	int level = 0;
 	int button = 0;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -97,7 +98,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  button = HAL_GPIO_ReadPin(Button_GPIO_Port, Button_Pin);
-	  (button == 0) ? (level++) : (level=0);
+	  (button == 0) ? ((level==10)?({}):(level++)) : ((level==0)?({}):(level--));
 	  HAL_GPIO_WritePin(GPIOA, Led_0_Pin,(level>0)?1:0);
 	  HAL_GPIO_WritePin(GPIOA, Led_1_Pin,(level>1)?1:0);
 	  HAL_GPIO_WritePin(GPIOA, Led_2_Pin,(level>2)?1:0);
@@ -108,7 +109,7 @@ int main(void)
 	  HAL_GPIO_WritePin(GPIOA, Led_7_Pin,(level>7)?1:0);
 	  HAL_GPIO_WritePin(GPIOB, Led_8_Pin,(level>8)?1:0);
 	  HAL_GPIO_WritePin(GPIOB, Led_9_Pin,(level>9)?1:0);
-	  HAL_Delay(500);
+	  HAL_Delay(100);
   }
   /* USER CODE END 3 */
 }
