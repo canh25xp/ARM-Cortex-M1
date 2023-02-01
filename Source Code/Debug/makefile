@@ -60,8 +60,8 @@ all: main-build
 main-build: Project_ARM.elf secondary-outputs
 
 # Tool invocations
-Project_ARM.elf Project_ARM.map: $(OBJS) $(USER_OBJS) C:\Users\Admin\Documents\Project\ ARM\Source\ Code\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Project_ARM.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Admin\Documents\Project ARM\Source Code\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project_ARM.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Project_ARM.elf Project_ARM.map: $(OBJS) $(USER_OBJS) C:\Users\Admin\Documents\GitHub\ARM-Cortex-M1\Source\ Code\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Project_ARM.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Admin\Documents\GitHub\ARM-Cortex-M1\Source Code\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project_ARM.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

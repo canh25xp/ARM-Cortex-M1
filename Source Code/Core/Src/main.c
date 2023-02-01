@@ -63,7 +63,7 @@ static void MX_GPIO_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	int i = 0;
+	int level = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -95,17 +95,17 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  for(i=0;i<11;i++){
-		  HAL_GPIO_WritePin(GPIOA, Led_0_Pin,i);
-		  HAL_GPIO_WritePin(GPIOA, Led_1_Pin,i-1);
-		  HAL_GPIO_WritePin(GPIOA, Led_2_Pin,i-2);
-		  HAL_GPIO_WritePin(GPIOA, Led_3_Pin,i-3);
-		  HAL_GPIO_WritePin(GPIOA, Led_4_Pin,i-4);
-		  HAL_GPIO_WritePin(GPIOA, Led_5_Pin,i-5);
-		  HAL_GPIO_WritePin(GPIOA, Led_6_Pin,i-6);
-		  HAL_GPIO_WritePin(GPIOA, Led_7_Pin,i-7);
-		  HAL_GPIO_WritePin(GPIOB, Led_8_Pin,i-8);
-		  HAL_GPIO_WritePin(GPIOB, Led_9_Pin,i-9);
+	  for(level=0;level<11;level++){
+		  HAL_GPIO_WritePin(GPIOA, Led_0_Pin,(level>0)?1:0);
+		  HAL_GPIO_WritePin(GPIOA, Led_1_Pin,(level>1)?1:0);
+		  HAL_GPIO_WritePin(GPIOA, Led_2_Pin,(level>2)?1:0);
+		  HAL_GPIO_WritePin(GPIOA, Led_3_Pin,(level>3)?1:0);
+		  HAL_GPIO_WritePin(GPIOA, Led_4_Pin,(level>4)?1:0);
+		  HAL_GPIO_WritePin(GPIOA, Led_5_Pin,(level>5)?1:0);
+		  HAL_GPIO_WritePin(GPIOA, Led_6_Pin,(level>6)?1:0);
+		  HAL_GPIO_WritePin(GPIOA, Led_7_Pin,(level>7)?1:0);
+		  HAL_GPIO_WritePin(GPIOB, Led_8_Pin,(level>8)?1:0);
+		  HAL_GPIO_WritePin(GPIOB, Led_9_Pin,(level>9)?1:0);
 		  HAL_Delay(500);
 	  }
   }
