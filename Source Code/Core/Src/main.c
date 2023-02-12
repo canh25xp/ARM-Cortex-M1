@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <math.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,12 +48,11 @@
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
-
+void shiftOut(uint8_t dataPin, uint8_t clockPin,uint8_t bitOrder, uint8_t val);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-volatile int test=0;
 /* USER CODE END 0 */
 
 /**
@@ -63,9 +62,7 @@ volatile int test=0;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	int level = 0;
-	int button = 0;
-
+	int data=0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -97,19 +94,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  test++;
-	  button = HAL_GPIO_ReadPin(Button_GPIO_Port, Button_Pin);
-	  HAL_GPIO_WritePin(Button_Led_GPIO_Port, Button_Led_Pin,button);
-	  (button == 0) ? ((level==8)?({}):(level++)) : ((level==0)?({}):(level--));
-	  HAL_GPIO_WritePin(GPIOA, Led_1_Pin,(level>0)?1:0);
-	  HAL_GPIO_WritePin(GPIOA, Led_2_Pin,(level>1)?1:0);
-	  HAL_GPIO_WritePin(GPIOA, Led_3_Pin,(level>2)?1:0);
-	  HAL_GPIO_WritePin(GPIOA, Led_4_Pin,(level>3)?1:0);
-	  HAL_GPIO_WritePin(GPIOA, Led_5_Pin,(level>4)?1:0);
-	  HAL_GPIO_WritePin(GPIOA, Led_6_Pin,(level>5)?1:0);
-	  HAL_GPIO_WritePin(GPIOA, Led_7_Pin,(level>6)?1:0);
-	  HAL_GPIO_WritePin(GPIOB, Led_8_Pin,(level>7)?1:0);
-	  HAL_Delay(100);
+	  for(data=0;data<9;data++){
+		  HAL_GPIO_WritePin(GPIOA, STCP_Pin,0);
+		  shiftOut(Data_Pin, SHCP_Pin,1, pow(2,data)-1);
+		  HAL_GPIO_WritePin(GPIOA, STCP_Pin,1);
+		  HAL_Delay(500);
+	  	  }
   }
   /* USER CODE END 3 */
 }
@@ -160,54 +150,35 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(Button_Led_GPIO_Port, Button_Led_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, Data_Pin|SHCP_Pin|STCP_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, Led_1_Pin|Led_2_Pin|Led_3_Pin|Led_4_Pin
-                          |Led_5_Pin|Led_6_Pin|Led_7_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(Led_8_GPIO_Port, Led_8_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : Button_Led_Pin */
-  GPIO_InitStruct.Pin = Button_Led_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(Button_Led_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : Led_1_Pin Led_2_Pin Led_3_Pin Led_4_Pin
-                           Led_5_Pin Led_6_Pin Led_7_Pin */
-  GPIO_InitStruct.Pin = Led_1_Pin|Led_2_Pin|Led_3_Pin|Led_4_Pin
-                          |Led_5_Pin|Led_6_Pin|Led_7_Pin;
+  /*Configure GPIO pins : Data_Pin SHCP_Pin STCP_Pin */
+  GPIO_InitStruct.Pin = Data_Pin|SHCP_Pin|STCP_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : Led_8_Pin */
-  GPIO_InitStruct.Pin = Led_8_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(Led_8_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : Button_Pin */
-  GPIO_InitStruct.Pin = Button_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(Button_GPIO_Port, &GPIO_InitStruct);
-
 }
 
 /* USER CODE BEGIN 4 */
-
+void shiftOut(uint8_t dataPin, uint8_t clockPin,uint8_t bitOrder, uint8_t val){
+	uint8_t i;
+	for (i = 0; i < 8; i++){
+		if(bitOrder==1){
+			HAL_GPIO_WritePin(GPIOA, dataPin,!!(val & (1 << (7 - i)))); //MSB First
+		}
+		else{
+			HAL_GPIO_WritePin(GPIOA, dataPin, !!(val & (1 << i))); //LSB First
+		}
+		HAL_GPIO_WritePin(GPIOA,clockPin, 1);
+		HAL_GPIO_WritePin(GPIOA,clockPin, 0);
+	}
+}
 /* USER CODE END 4 */
 
 /**
