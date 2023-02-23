@@ -98,8 +98,14 @@ int main(void)
 		  HAL_GPIO_WritePin(GPIOA, STCP_Pin,0);
 		  shiftOut(Data_Pin, SHCP_Pin,1, pow(2,data)-1);
 		  HAL_GPIO_WritePin(GPIOA, STCP_Pin,1);
-		  HAL_Delay(500);
+		  HAL_Delay(200);
 	  	  }
+	  for(data=8;data>=0;data--){
+	  		  HAL_GPIO_WritePin(GPIOA, STCP_Pin,0);
+	  		  shiftOut(Data_Pin, SHCP_Pin,1, pow(2,data)-1);
+	  		  HAL_GPIO_WritePin(GPIOA, STCP_Pin,1);
+	  		  HAL_Delay(200);
+	  	  	  }
   }
   /* USER CODE END 3 */
 }
