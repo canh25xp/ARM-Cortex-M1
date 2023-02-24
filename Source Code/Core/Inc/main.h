@@ -59,10 +59,10 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define Data_Pin GPIO_PIN_1
 #define Data_GPIO_Port GPIOA
-#define SHCP_Pin GPIO_PIN_2
-#define SHCP_GPIO_Port GPIOA
-#define STCP_Pin GPIO_PIN_3
+#define STCP_Pin GPIO_PIN_2
 #define STCP_GPIO_Port GPIOA
+#define SHCP_Pin GPIO_PIN_3
+#define SHCP_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

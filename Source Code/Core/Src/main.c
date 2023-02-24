@@ -49,6 +49,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 void shiftOut(uint8_t dataPin, uint8_t clockPin,uint8_t bitOrder, uint8_t val);
+void disp(uint8_t col, uint8_t row);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -62,7 +63,8 @@ void shiftOut(uint8_t dataPin, uint8_t clockPin,uint8_t bitOrder, uint8_t val);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	int data=0;
+	int delay=50;
+	int j=0, i=0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -84,7 +86,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -94,18 +95,22 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  for(data=0;data<9;data++){
-		  HAL_GPIO_WritePin(GPIOA, STCP_Pin,0);
-		  shiftOut(Data_Pin, SHCP_Pin,1, pow(2,data)-1);
-		  HAL_GPIO_WritePin(GPIOA, STCP_Pin,1);
-		  HAL_Delay(200);
-	  	  }
-	  for(data=8;data>=0;data--){
-	  		  HAL_GPIO_WritePin(GPIOA, STCP_Pin,0);
-	  		  shiftOut(Data_Pin, SHCP_Pin,1, pow(2,data)-1);
-	  		  HAL_GPIO_WritePin(GPIOA, STCP_Pin,1);
-	  		  HAL_Delay(200);
-	  	  	  }
+	  for(i=0;i<8;i++){
+		  disp(255,pow(2,i));
+		  HAL_Delay(delay);
+	  }
+	  for(i=7;i>=0;i--){
+		  disp(255,pow(2,i));
+		  HAL_Delay(delay);
+	  }
+	  for(i=0;i<8;i++){
+		  disp(pow(2,i),255);
+		  HAL_Delay(delay);
+	  }
+	  for(i=7;i>=0;i--){
+		  disp(pow(2,i),255);
+		  HAL_Delay(delay);
+	  }
   }
   /* USER CODE END 3 */
 }
@@ -160,10 +165,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, Data_Pin|SHCP_Pin|STCP_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, Data_Pin|STCP_Pin|SHCP_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : Data_Pin SHCP_Pin STCP_Pin */
-  GPIO_InitStruct.Pin = Data_Pin|SHCP_Pin|STCP_Pin;
+  /*Configure GPIO pins : Data_Pin STCP_Pin SHCP_Pin */
+  GPIO_InitStruct.Pin = Data_Pin|STCP_Pin|SHCP_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -172,6 +177,12 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void disp(uint8_t row, uint8_t col){
+	  HAL_GPIO_WritePin(GPIOA, STCP_Pin,0);
+	  shiftOut(Data_Pin, SHCP_Pin,1, col);
+	  shiftOut(Data_Pin, SHCP_Pin,1, row);
+	  HAL_GPIO_WritePin(GPIOA, STCP_Pin,1);
+}
 void shiftOut(uint8_t dataPin, uint8_t clockPin,uint8_t bitOrder, uint8_t val){
 	uint8_t i;
 	for (i = 0; i < 8; i++){
